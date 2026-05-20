@@ -1,0 +1,7 @@
+app/bin/
+app/obj/
+extension/node_modules/
+extension/dist/
+Thumbs.db
+.DS_Store
+.vscode/
