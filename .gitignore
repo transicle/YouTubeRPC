@@ -1,7 +1,5 @@
-app/bin/
-app/obj/
 web/node_modules/
 web/dist/
-Thumbs.db
-.DS_Store
 .vscode/
+build/
+dist/
