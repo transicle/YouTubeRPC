@@ -1,7 +1,7 @@
 app/bin/
 app/obj/
-extension/node_modules/
-extension/dist/
+web/node_modules/
+web/dist/
 Thumbs.db
 .DS_Store
 .vscode/

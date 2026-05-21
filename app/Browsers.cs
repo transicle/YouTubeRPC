@@ -6,34 +6,32 @@
 
 static class Browsers
 {
-    public enum BrowserType { Chromium, Firefox }
-
-    public record BrowserEntry(string Name, string RegistryPath, BrowserType Type);
+    public record BrowserEntry(string Name, string RegistryPath);
 
     public static readonly BrowserEntry[] All =
     [
         // Chromium-based
-        new("Chrome",             @"Software\Google\Chrome\NativeMessagingHosts",                    BrowserType.Chromium),
-        new("Edge",               @"Software\Microsoft\Edge\NativeMessagingHosts",                   BrowserType.Chromium),
-        new("Brave",              @"Software\BraveSoftware\Brave-Browser\NativeMessagingHosts",      BrowserType.Chromium),
-        new("Vivaldi",            @"Software\Vivaldi\NativeMessagingHosts",                          BrowserType.Chromium),
-        new("Opera",              @"Software\Opera Software\Opera Stable\NativeMessagingHosts",      BrowserType.Chromium),
-        new("Opera GX",           @"Software\Opera Software\Opera GX Stable\NativeMessagingHosts",   BrowserType.Chromium),
-        new("Chromium",           @"Software\Chromium\NativeMessagingHosts",                         BrowserType.Chromium),
-        new("Yandex Browser",     @"Software\Yandex\YandexBrowser\NativeMessagingHosts",             BrowserType.Chromium),
-        new("Thorium",            @"Software\Thorium\NativeMessagingHosts",                          BrowserType.Chromium),
-        new("Arc",                @"Software\TheBrowserCompany\Arc\NativeMessagingHosts",            BrowserType.Chromium),
-        new("Whale",              @"Software\Naver\Whale\NativeMessagingHosts",                      BrowserType.Chromium),
-        new("Ungoogled Chromium", @"Software\Chromium\NativeMessagingHosts",                         BrowserType.Chromium),
+        new("Chrome",             @"Software\Google\Chrome\NativeMessagingHosts"),
+        new("Edge",               @"Software\Microsoft\Edge\NativeMessagingHosts"),
+        new("Brave",              @"Software\BraveSoftware\Brave-Browser\NativeMessagingHosts"),
+        new("Vivaldi",            @"Software\Vivaldi\NativeMessagingHosts"),
+        new("Opera",              @"Software\Opera Software\Opera Stable\NativeMessagingHosts"),
+        new("Opera GX",           @"Software\Opera Software\Opera GX Stable\NativeMessagingHosts"),
+        new("Chromium",           @"Software\Chromium\NativeMessagingHosts"),
+        new("Yandex Browser",     @"Software\Yandex\YandexBrowser\NativeMessagingHosts"),
+        new("Thorium",            @"Software\Thorium\NativeMessagingHosts"),
+        new("Arc",                @"Software\TheBrowserCompany\Arc\NativeMessagingHosts"),
+        new("Whale",              @"Software\Naver\Whale\NativeMessagingHosts"),
+        new("Ungoogled Chromium", @"Software\Chromium\NativeMessagingHosts"),
 
         // Firefox-based
-        new("Firefox",            @"Software\Mozilla\NativeMessagingHosts",                          BrowserType.Firefox),
-        new("LibreWolf",          @"Software\Mozilla\NativeMessagingHosts",                          BrowserType.Firefox),
-        new("Zen Browser",        @"Software\Mozilla\NativeMessagingHosts",                          BrowserType.Firefox),
-        new("Waterfox",           @"Software\Waterfox\NativeMessagingHosts",                         BrowserType.Firefox),
-        new("Floorp",             @"Software\Floorp\NativeMessagingHosts",                           BrowserType.Firefox),
-        new("Pale Moon",          @"Software\Moonchild Productions\Pale Moon\NativeMessagingHosts",  BrowserType.Firefox),
-        new("Basilisk",           @"Software\Moonchild Productions\Basilisk\NativeMessagingHosts",   BrowserType.Firefox),
-        new("Mercury",            @"Software\Mozilla\NativeMessagingHosts",                          BrowserType.Firefox),
+        new("Firefox",            @"Software\Mozilla\NativeMessagingHosts"),
+        new("LibreWolf",          @"Software\Mozilla\NativeMessagingHosts"),
+        new("Zen Browser",        @"Software\Mozilla\NativeMessagingHosts"),
+        new("Waterfox",           @"Software\Waterfox\NativeMessagingHosts"),
+        new("Floorp",             @"Software\Floorp\NativeMessagingHosts"),
+        new("Pale Moon",          @"Software\Moonchild Productions\Pale Moon\NativeMessagingHosts"),
+        new("Basilisk",           @"Software\Moonchild Productions\Basilisk\NativeMessagingHosts"),
+        new("Mercury",            @"Software\Mozilla\NativeMessagingHosts"),
     ];
 }

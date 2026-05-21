@@ -22,9 +22,10 @@ class DiscordService : IDisposable
         {
             Details = msg.Title ?? "Unknown Title",
             State = msg.Artist ?? "Unknown Artist",
+            Type = ServiceToActivityType(msg.Service),
             Assets = new Assets
             {
-                LargeImageKey = ServiceToImageKey(msg.Service),
+                LargeImageKey = "youtube",
                 LargeImageText = ServiceToLabel(msg.Service)
             }
         });
@@ -32,14 +33,10 @@ class DiscordService : IDisposable
 
     public void Dispose() => _client.Dispose();
 
-    private static string ServiceToImageKey(string? service) => service switch
+    private static ActivityType ServiceToActivityType(string? service) => service switch
     {
-        "ytmusic"  => "ytmusic",
-        "youtube"  => "youtube",
-        "ytshorts" => "ytshorts",
-        "ytlive"   => "youtube",
-        "yttv"     => "yttv",
-        _ => "youtube"
+        "ytmusic" => ActivityType.Listening,
+        _ => ActivityType.Watching
     };
 
     private static string ServiceToLabel(string? service) => service switch

@@ -10,29 +10,23 @@ static class Installer
     public static void Install()
     {
         string exePath = Environment.ProcessPath!;
-        string dataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "YouTubeRPC");
+        string dataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "YouTube RPC");
         Directory.CreateDirectory(dataDir);
 
-        string chromiumManifest = Path.Combine(dataDir, "manifest_chromium.json");
-        string firefoxManifest = Path.Combine(dataDir, "manifest_firefox.json");
-
-        WriteChromiumManifest(chromiumManifest, exePath);
-        WriteFirefoxManifest(firefoxManifest, exePath);
+        string manifestPath = Path.Combine(dataDir, "manifest.json");
+        WriteManifest(manifestPath, exePath);
 
         var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach (var browser in Browsers.All)
         {
-            string manifestPath = browser.Type == Browsers.BrowserType.Firefox ? firefoxManifest : chromiumManifest;
             string regPath = $@"{browser.RegistryPath}\{HostName}";
-
             if (!seen.Add(regPath)) continue;
-
             Registry.CurrentUser.CreateSubKey(regPath).SetValue("", manifestPath);
         }
 
         Registry.CurrentUser
             .OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", writable: true)!
-            .SetValue("YouTubeRPC", $"\"{exePath}\"");
+            .SetValue("YouTube RPC", $"\"{exePath}\"");
     }
 
     public static void Uninstall()
@@ -47,34 +41,22 @@ static class Installer
 
         Registry.CurrentUser
             .OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", writable: true)!
-            .DeleteValue("YouTubeRPC", throwOnMissingValue: false);
+            .DeleteValue("YouTube RPC", throwOnMissingValue: false);
 
-        string dataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "YouTubeRPC");
+        string dataDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "YouTube RPC");
         if (Directory.Exists(dataDir))
             Directory.Delete(dataDir, recursive: true);
     }
 
-    private static void WriteChromiumManifest(string path, string exePath)
+    private static void WriteManifest(string path, string exePath)
     {
         var manifest = new
         {
             name = HostName,
-            description = "YouTubeRPC Native Messaging Host",
+            description = "YouTube RPC Native Messaging Host",
             path = exePath,
             type = "stdio",
-            allowed_origins = new[] { $"chrome-extension://{ChromiumExtensionId}/" }
-        };
-        File.WriteAllText(path, JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true }));
-    }
-
-    private static void WriteFirefoxManifest(string path, string exePath)
-    {
-        var manifest = new
-        {
-            name = HostName,
-            description = "YouTubeRPC Native Messaging Host",
-            path = exePath,
-            type = "stdio",
+            allowed_origins = new[] { $"chrome-extension://{ChromiumExtensionId}/" },
             allowed_extensions = new[] { FirefoxExtensionId }
         };
         File.WriteAllText(path, JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true }));
