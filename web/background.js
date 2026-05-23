@@ -1,9 +1,9 @@
 const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 
-const tabStates   = new Map();
-let   port        = null;
-let   lastSent    = null;
-let   keepAliveId = null;
+const tabStates = new Map();
+let port = null;
+let lastSent = null;
+let keepAliveId = null;
 
 const PRIORITY = { ytmusic: 0, youtube: 1, ytshorts: 2, ytlive: 3, yttv: 4 };
 
@@ -27,8 +27,8 @@ function getPort() {
         });
 
         port.onDisconnect.addListener(() => {
-            port      = null;
-            lastSent  = null;
+            port = null;
+            lastSent = null;
             stopKeepAlive();
         });
 
@@ -57,7 +57,7 @@ function getBestState() {
     let best = null;
     for (const state of tabStates.values()) {
         if (!best) { best = state; continue; }
-        const bPlay = best.state  === 'playing';
+        const bPlay = best.state === 'playing';
         const tPlay = state.state === 'playing';
         if (tPlay && !bPlay) { best = state; continue; }
         if (!tPlay && bPlay) continue;
@@ -67,9 +67,9 @@ function getBestState() {
 }
 
 function pushUpdate(force = false) {
-    const best    = getBestState();
+    const best = getBestState();
     const payload = best ?? { state: 'stopped' };
-    const json    = JSON.stringify(payload);
+    const json = JSON.stringify(payload);
 
     if (!force && json === lastSent) return;
     lastSent = json;
@@ -88,7 +88,7 @@ browserAPI.runtime.onMessage.addListener((message, sender) => {
 
     if (message._log) {
         if (message.level === 'warn') console.warn('[YT-RPC]', message.text);
-        else                         console.log ('[YT-RPC]', message.text);
+        else console.log('[YT-RPC]', message.text);
         return;
     }
 
@@ -96,7 +96,7 @@ browserAPI.runtime.onMessage.addListener((message, sender) => {
     const isStop = !message.title && message.state === 'stopped';
 
     if (isStop) tabStates.delete(tabId);
-    else        tabStates.set(tabId, message);
+    else tabStates.set(tabId, message);
 
     pushUpdate();
 });

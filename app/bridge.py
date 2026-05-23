@@ -5,6 +5,7 @@ import struct
 import time
 import ctypes
 import winreg
+import win32file
 from pathlib import Path
 
 VERSION          = "1.0.0"
@@ -45,7 +46,7 @@ class DiscordPipe:
         self._pipe = None
 
     def _open(self):
-        import win32file
+        
         for i in range(10):
             try:
                 pipe = win32file.CreateFile(
@@ -65,7 +66,6 @@ class DiscordPipe:
         return None
 
     def _write_frame(self, pipe, op: int, payload: dict) -> bool:
-        import win32file
         try:
             data = json.dumps(payload).encode('utf-8')
             win32file.WriteFile(pipe, struct.pack('<II', op, len(data)) + data)
@@ -99,7 +99,6 @@ class DiscordPipe:
     def close(self) -> None:
         if self._pipe:
             try:
-                import win32file
                 win32file.CloseHandle(self._pipe)
             except Exception:
                 pass
@@ -116,23 +115,20 @@ def _service_label(svc: str) -> str:
 
 
 def build_activity(msg: dict) -> dict:
-    state     = msg.get('state', 'stopped')
-    title     = (msg.get('title')  or 'Unknown')[:128]
-    artist    = (msg.get('artist') or '')
-    svc       = msg.get('service', 'youtube')
-    elapsed   = msg.get('elapsed')
-    duration  = msg.get('duration')
-    thumbnail = msg.get('thumbnail')
-    page_url  = msg.get('pageUrl')
+    state      = msg.get('state', 'stopped')
+    title      = (msg.get('title')  or 'Unknown')[:128]
+    artist     = (msg.get('artist') or '')
+    svc        = msg.get('service', 'youtube')
+    start_time = msg.get('startTime')
+    thumbnail  = msg.get('thumbnail')
+    page_url   = msg.get('pageUrl')
 
     paused = state == 'paused'
 
     timestamps: dict | None = None
-    if elapsed is not None and duration and duration > 1:
-        now = int(time.time())
+    if start_time is not None:
         timestamps = {
-            'start': int(now - elapsed),
-            'end':   int(now + duration - elapsed),
+            'start': int(start_time // 1000),
         }
 
     large_image = (
