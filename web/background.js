@@ -86,6 +86,12 @@ function pushUpdate(force = false) {
 browserAPI.runtime.onMessage.addListener((message, sender) => {
     if (!sender.tab) return;
 
+    if (message._log) {
+        if (message.level === 'warn') console.warn('[YT-RPC]', message.text);
+        else                         console.log ('[YT-RPC]', message.text);
+        return;
+    }
+
     const { id: tabId } = sender.tab;
     const isStop = !message.title && message.state === 'stopped';
 
@@ -96,6 +102,24 @@ browserAPI.runtime.onMessage.addListener((message, sender) => {
 });
 
 browserAPI.tabs.onRemoved.addListener((tabId) => {
-    if (tabStates.delete(tabId)) pushUpdate(true);
+    tabStates.delete(tabId);
+    pushUpdate(true);
+});
+
+browserAPI.runtime.onConnect.addListener((port) => {
+    if (port.name !== 'lifecycle') return;
+    const tabId = port.sender?.tab?.id;
+    if (!tabId) return;
+    port.onDisconnect.addListener(() => {
+        tabStates.delete(tabId);
+        pushUpdate(true);
+    });
+});
+
+browserAPI.tabs.onUpdated.addListener((tabId, changeInfo) => {
+    if (changeInfo.url !== undefined && tabStates.has(tabId) && !changeInfo.url.includes('youtube.com')) {
+        tabStates.delete(tabId);
+        pushUpdate(true);
+    }
 });
 

@@ -3,7 +3,8 @@ function getService() {
     if (hostname === 'music.youtube.com') return 'ytmusic';
     if (hostname === 'tv.youtube.com')    return 'yttv';
     if (pathname.startsWith('/shorts/'))  return 'ytshorts';
-    if (document.querySelector('.ytp-live-badge')) return 'ytlive';
+    const liveBadge = document.querySelector('.ytp-live-badge');
+    if (liveBadge && liveBadge.offsetParent !== null) return 'ytlive';
     return 'youtube';
 }
 

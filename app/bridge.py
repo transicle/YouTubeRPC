@@ -128,7 +128,7 @@ def build_activity(msg: dict) -> dict:
     paused = state == 'paused'
 
     timestamps: dict | None = None
-    if not paused and elapsed is not None and duration and duration > 1:
+    if elapsed is not None and duration and duration > 1:
         now = int(time.time())
         timestamps = {
             'start': int(now - elapsed),
@@ -143,6 +143,7 @@ def build_activity(msg: dict) -> dict:
     state_text = (f'\u23f8\u2002{artist}' if paused else artist)[:128]
 
     activity: dict = {
+        'name':    _service_label(svc),
         'type':    2 if svc == 'ytmusic' else 3,
         'details': title,
         'assets':  {
@@ -238,6 +239,8 @@ def install() -> None:
     for sub in [
         rf'Software\Mozilla\NativeMessagingHosts\{HOST_NAME}',
         rf'Software\Zen Browser\NativeMessagingHosts\{HOST_NAME}',
+        rf'Software\Google\Chrome\NativeMessagingHosts\{HOST_NAME}',
+        rf'Software\Chromium\NativeMessagingHosts\{HOST_NAME}',
     ]:
         try:
             with winreg.CreateKey(winreg.HKEY_CURRENT_USER, sub) as key:
@@ -267,6 +270,8 @@ def uninstall() -> None:
     for sub in [
         rf'Software\Mozilla\NativeMessagingHosts\{HOST_NAME}',
         rf'Software\Zen Browser\NativeMessagingHosts\{HOST_NAME}',
+        rf'Software\Google\Chrome\NativeMessagingHosts\{HOST_NAME}',
+        rf'Software\Chromium\NativeMessagingHosts\{HOST_NAME}',
     ]:
         try:
             winreg.DeleteKey(winreg.HKEY_CURRENT_USER, sub)
