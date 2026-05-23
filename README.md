@@ -15,3 +15,7 @@ FireFox and Chrome browser plugin and Windows app for displaying a clean, rich p
 - **YouTube Shorts**
 - **YouTube Live**
 - **YouTube TV**
+
+## Images
+
+<img width="351" height="630" alt="image" src="https://github.com/user-attachments/assets/91f0c9b8-8067-44e1-a648-7fd1766c4dd7" />
