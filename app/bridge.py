@@ -138,8 +138,13 @@ def build_activity(msg: dict) -> dict:
 
     state_text = (f'\u23f8\u2002{artist}' if paused else artist)[:128]
 
+    name_parts = [title]
+    if artist:
+        name_parts.append(artist)
+    activity_name = ' \u2022 '.join(name_parts)[:128]
+
     activity: dict = {
-        'name':    _service_label(svc),
+        'name':    activity_name,
         'type':    2 if svc == 'ytmusic' else 3,
         'details': title,
         'assets':  {
